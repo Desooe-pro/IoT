@@ -1,0 +1,301 @@
+[
+  [
+    {
+      "id": "2598f8160d9ae3f0",
+      "type": "tab",
+      "label": "Flux 1",
+      "disabled": false,
+      "info": "",
+      "env": []
+    },
+    {
+      "id": "7402a8bf5dfa0e86",
+      "type": "inject",
+      "z": "2598f8160d9ae3f0",
+      "name": "TEST:horodatage",
+      "props": [
+        {
+          "p": "payload"
+        },
+        {
+          "p": "topic",
+          "vt": "str"
+        }
+      ],
+      "repeat": "",
+      "crontab": "",
+      "once": false,
+      "onceDelay": 0.1,
+      "topic": "",
+      "payload": "object",
+      "payloadType": "date",
+      "x": 140,
+      "y": 240,
+      "wires": [["3236aa47e29d1ffb"]]
+    },
+    {
+      "id": "64958881820a61de",
+      "type": "debug",
+      "z": "2598f8160d9ae3f0",
+      "name": "debug 1",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "tostatus": false,
+      "complete": "payload",
+      "targetType": "msg",
+      "statusVal": "",
+      "statusType": "auto",
+      "x": 740,
+      "y": 240,
+      "wires": []
+    },
+    {
+      "id": "3236aa47e29d1ffb",
+      "type": "function",
+      "z": "2598f8160d9ae3f0",
+      "name": "function 1",
+      "func": "var date = new Date(msg.payload);\nmsg.payload = date.toString();\nreturn msg;",
+      "outputs": 1,
+      "timeout": 0,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 440,
+      "y": 240,
+      "wires": [["64958881820a61de"]]
+    },
+    {
+      "id": "1fa86b296e83bf0a",
+      "type": "inject",
+      "z": "2598f8160d9ae3f0",
+      "name": "",
+      "props": [
+        {
+          "p": "payload"
+        },
+        {
+          "p": "topic",
+          "vt": "str"
+        }
+      ],
+      "repeat": "",
+      "crontab": "",
+      "once": false,
+      "onceDelay": 0.1,
+      "topic": "",
+      "payload": "",
+      "payloadType": "date",
+      "x": 130,
+      "y": 380,
+      "wires": [["47edec1803e99964"]]
+    },
+    {
+      "id": "47edec1803e99964",
+      "type": "http request",
+      "z": "2598f8160d9ae3f0",
+      "name": "",
+      "method": "GET",
+      "ret": "txt",
+      "paytoqs": "ignore",
+      "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.csv",
+      "tls": "",
+      "persist": false,
+      "proxy": "",
+      "insecureHTTPParser": false,
+      "authType": "",
+      "senderr": false,
+      "headers": [],
+      "x": 310,
+      "y": 380,
+      "wires": [["35ea061331456cdd"]]
+    },
+    {
+      "id": "35ea061331456cdd",
+      "type": "csv",
+      "z": "2598f8160d9ae3f0",
+      "name": "",
+      "spec": "rfc",
+      "sep": ",",
+      "hdrin": true,
+      "hdrout": "none",
+      "multi": "one",
+      "ret": "\\r\\n",
+      "temp": "",
+      "skip": "0",
+      "strings": true,
+      "include_empty_strings": "",
+      "include_null_values": "",
+      "x": 470,
+      "y": 380,
+      "wires": [["709ddc4b297178ee", "15c0d3818c30b2d8"]]
+    },
+    {
+      "id": "709ddc4b297178ee",
+      "type": "debug",
+      "z": "2598f8160d9ae3f0",
+      "name": "debug 3",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "tostatus": false,
+      "complete": "false",
+      "statusVal": "",
+      "statusType": "auto",
+      "x": 620,
+      "y": 380,
+      "wires": []
+    },
+    {
+      "id": "15c0d3818c30b2d8",
+      "type": "switch",
+      "z": "2598f8160d9ae3f0",
+      "name": "",
+      "property": "payload.mag",
+      "propertyType": "msg",
+      "rules": [
+        {
+          "t": "gte",
+          "v": "7",
+          "vt": "num"
+        }
+      ],
+      "checkall": "true",
+      "repair": false,
+      "outputs": 1,
+      "x": 620,
+      "y": 440,
+      "wires": [["f3f666e20292c374"]]
+    },
+    {
+      "id": "f3f666e20292c374",
+      "type": "change",
+      "z": "2598f8160d9ae3f0",
+      "name": "",
+      "rules": [
+        {
+          "t": "set",
+          "p": "payload",
+          "pt": "msg",
+          "to": "PANIC!",
+          "tot": "str"
+        }
+      ],
+      "action": "",
+      "property": "",
+      "from": "",
+      "to": "",
+      "reg": false,
+      "x": 810,
+      "y": 440,
+      "wires": [["3b517a18a1c6a4a4"]]
+    },
+    {
+      "id": "3b517a18a1c6a4a4",
+      "type": "debug",
+      "z": "2598f8160d9ae3f0",
+      "name": "debug 4",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "tostatus": false,
+      "complete": "false",
+      "statusVal": "",
+      "statusType": "auto",
+      "x": 1000,
+      "y": 440,
+      "wires": []
+    }
+  ],
+  [
+    {
+      "id": "7d46698f29ca2467",
+      "type": "tab",
+      "label": "Flux 3",
+      "disabled": false,
+      "info": "",
+      "env": []
+    },
+    {
+      "id": "459a573f675b2b8c",
+      "type": "inject",
+      "z": "7d46698f29ca2467",
+      "name": "",
+      "props": [
+        {
+          "p": "payload"
+        }
+      ],
+      "repeat": "0.2",
+      "crontab": "",
+      "once": true,
+      "onceDelay": 0.1,
+      "topic": "",
+      "payload": "",
+      "payloadType": "num",
+      "x": 300,
+      "y": 260,
+      "wires": [["867903b7b94ca752"]]
+    },
+    {
+      "id": "867903b7b94ca752",
+      "type": "function",
+      "z": "7d46698f29ca2467",
+      "name": "function 2",
+      "func": "msg.payload = Math.random() * 25 + 10;\nmsg.payload = Math.round(msg.payload);\nreturn msg;",
+      "outputs": 1,
+      "timeout": 0,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 500,
+      "y": 260,
+      "wires": [["7289e9dd7de1a689"]]
+    },
+    {
+      "id": "7289e9dd7de1a689",
+      "type": "ui_gauge",
+      "z": "7d46698f29ca2467",
+      "name": "",
+      "group": "f5e35b1c3f658230",
+      "order": 0,
+      "width": 0,
+      "height": 0,
+      "gtype": "gage",
+      "title": "gauge",
+      "label": "°C",
+      "format": "{{value}}",
+      "min": 0,
+      "max": "35",
+      "colors": ["#00b500", "#e6e600", "#ca3838"],
+      "seg1": "",
+      "seg2": "",
+      "diff": false,
+      "className": "",
+      "x": 690,
+      "y": 260,
+      "wires": []
+    },
+    {
+      "id": "f5e35b1c3f658230",
+      "type": "ui_group",
+      "name": "Default",
+      "tab": "a0bb2dfbf968faba",
+      "order": 1,
+      "disp": true,
+      "width": 6,
+      "collapse": false,
+      "className": ""
+    },
+    {
+      "id": "a0bb2dfbf968faba",
+      "type": "ui_tab",
+      "name": "Home",
+      "icon": "dashboard",
+      "disabled": false,
+      "hidden": false
+    }
+  ]
+]
